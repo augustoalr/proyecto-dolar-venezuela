@@ -1,0 +1,47 @@
+name: Actualizar Dólar
+
+on:
+  schedule:
+    # Horario para el dólar oficial (todos los días a las 9:00 AM UTC)
+    - cron: '02 21 * * *'
+    # Horario para el dólar paralelo (todos los días a las 3:00 PM UTC)
+    - cron: '2 17 * * *'
+    - cron: '20 17 * * *'
+    
+    
+ 
+
+jobs:
+  dolar_oficial:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clonar el repositorio
+        uses: actions/checkout@v3
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Ejecutar scraping del dólar oficial
+        run: node server.js --oficial
+
+  dolar_paralelo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clonar el repositorio
+        uses: actions/checkout@v3
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Ejecutar scraping del dólar paralelo
+        run: node server.js --paralelo
