@@ -12,6 +12,7 @@ async function cargarDatos() {
   
       // Actualizamos la fecha de la última actualización
       document.getElementById('ultima-actualizacion').textContent = data.ultima_actualizacion;
+      document.getElementById('ultima-actualizacion-hora').textContent = data.ultima_actualizacion_hora;
     } catch (error) {
       console.error('Error al cargar los datos:', error);
     }
