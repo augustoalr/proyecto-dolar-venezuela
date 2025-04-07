@@ -36,15 +36,15 @@ async function obtenerDolarOficial() {
     console.log('Navegador cerrado.');
 
     if (dolarOficial) {
-      const fechaActual = moment().tz('America/Caracas').format('YYYY-MM-DDTHH:mm:ssZ');
-      const horaActual = moment().tz('America/Caracas').format('HH:mm:ss');
+      const fechaActual = moment().tz('America/Caracas').format('DD-MM-YYYY / HH:mm:ss');
+      //const horaActual = moment().tz('America/Caracas').format('HH:mm:ss');
       const data = JSON.parse(fs.readFileSync('data.json', 'utf8'));
       data.dolar_oficial = parseFloat(dolarOficial.replace(',', '.'));
       if (data.dolar_paralelo) {
         data.dolar_promedio = (data.dolar_oficial + data.dolar_paralelo) / 2;
       }
       data.ultima_actualizacion = fechaActual;
-      data.ultima_actualizacion_hora = horaActual;
+      //data.ultima_actualizacion_hora = horaActual;
       
 
      
@@ -77,15 +77,15 @@ async function obtenerDolarParalelo() {
     await browser.close();
 
     if (dolarParalelo) {
-      const fechaActual = moment().tz('America/Caracas').format('DD/MM/YYYY');
-      const horaActual = moment().tz('America/Caracas').format('HH:mm:ss');
+      const fechaActual = moment().tz('America/Caracas').format('DD-MM-YYYY / HH:mm:ss');
+      //const horaActual = moment().tz('America/Caracas').format('HH:mm:ss');
       const data = JSON.parse(fs.readFileSync('data.json', 'utf8'));
       data.dolar_paralelo = parseFloat(dolarParalelo.replace(',', '.'));
       if (data.dolar_oficial) {
         data.dolar_promedio = (data.dolar_oficial + data.dolar_paralelo) / 2;
       }
       data.ultima_actualizacion = fechaActual;
-      data.ultima_actualizacion_hora = horaActual;
+      //data.ultima_actualizacion_hora = horaActual;
       fs.writeFileSync('data.json', JSON.stringify(data, null, 2), 'utf8');
       console.log('Dólar paralelo actualizado:', data.dolar_paralelo);
     }
@@ -105,7 +105,18 @@ if (args.includes('--oficial')) {
   (async () => {
     await obtenerDolarParalelo();
   })();
+} else if (args.includes('--promedio')) {
+  (async () => {
+    const data = JSON.parse(fs.readFileSync('data.json', 'utf8'));
+    if (data.dolar_oficial && data.dolar_paralelo) {
+      data.dolar_promedio = (data.dolar_oficial + data.dolar_paralelo) / 2;
+      console.log('Dólar promedio:', data.dolar_promedio);
+    } else {
+      console.log('No se puede calcular el dólar promedio. Asegúrate de haber actualizado el dólar oficial y paralelo.');
+    }
+  })();
 } else {
-  console.log('Por favor, especifica --oficial o --paralelo como argumento.');
+  console.log('Por favor, especifica --oficial, --paralelo o --promedio como argumento.');
 }
+
 
