@@ -78,12 +78,14 @@ async function obtenerDolarParalelo() {
 
     if (dolarParalelo) {
       const fechaActual = moment().tz('America/Caracas').format('DD/MM/YYYY');
+      const horaActual = moment().tz('America/Caracas').format('HH:mm:ss');
       const data = JSON.parse(fs.readFileSync('data.json', 'utf8'));
       data.dolar_paralelo = parseFloat(dolarParalelo.replace(',', '.'));
       if (data.dolar_oficial) {
         data.dolar_promedio = (data.dolar_oficial + data.dolar_paralelo) / 2;
       }
       data.ultima_actualizacion = fechaActual;
+      data.ultima_actualizacion_hora = horaActual;
       fs.writeFileSync('data.json', JSON.stringify(data, null, 2), 'utf8');
       console.log('Dólar paralelo actualizado:', data.dolar_paralelo);
     }
