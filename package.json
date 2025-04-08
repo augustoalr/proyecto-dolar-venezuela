@@ -1,8 +1,8 @@
 {
   "name": "proyecto-dolar-venezuela",
   "version": "1.0.0",
-  "description": "",
-  "main": "script.js",
+  "description": "Scraping del precio del dólar en Venezuela",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
@@ -15,5 +15,8 @@
     "moment-timezone": "^0.5.48",
     "node-cron": "^3.0.3",
     "puppeteer": "^24.6.0"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }
