@@ -1,30 +1,30 @@
 name: Actualizar Dólar
 
 on:
-  workflow_dispatch: # Habilita la ejecución manual
+  workflow_dispatch:
   schedule:
-    # Horario para el dólar oficial (5:02 PM Venezuela)
     - cron: '2 21 * * *'
-    # Horarios para el dólar paralelo
-    - cron: '0 16 * * *'  # 12:00 PM Venezuela
-    - cron: '30 16 * * *' # 12:30 PM Venezuela
-    - cron: '45 16 * * *' # 12:45 PM Venezuela
-    - cron: '10 17 * * *' # 1:10 PM Venezuela
+    - cron: '0 16 * * *'
+    - cron: '30 16 * * *'
+    - cron: '45 16 * * *'
+    - cron: '10 17 * * *'
 
 jobs:
   dolar_oficial:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Clonar el repositorio
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0 # Asegura que se traigan todas las referencias del repositorio
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configurar Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-          cache: 'npm' # Habilita la caché de npm para acelerar las instalaciones
+          cache: 'npm'
 
       - name: Configurar Puppeteer para omitir la descarga de Chromium
         env:
@@ -38,31 +38,23 @@ jobs:
         run: node server.js --oficial
 
       - name: Forzar cambios en data.js
-        run: echo "// Actualización forzada $(date)" >> data.js
-
-      - name: Confirmar cambios locales
         run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
+          echo "// Actualización forzada $(date)" >> data.js
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add data.js
-          git commit -m "Confirmar cambios locales en data.js" || echo "Sin cambios para confirmar"
-
-      - name: Sincronizar con el repositorio remoto
-        run: |
-          git fetch origin master
-          git rebase origin/master || git rebase --abort
-
-      - name: Subir cambios al repositorio
-        run: |
-          git push origin master
+          git commit -m "Actualizar data.js con los últimos datos del dólar"
+          git push
 
   dolar_paralelo:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Clonar el repositorio
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0 # Asegura que se traigan todas las referencias del repositorio
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configurar Node.js
         uses: actions/setup-node@v3
@@ -81,20 +73,10 @@ jobs:
         run: node server.js --paralelo
 
       - name: Forzar cambios en data.js
-        run: echo "// Actualización forzada $(date)" >> data.js
-
-      - name: Confirmar cambios locales
         run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
+          echo "// Actualización forzada $(date)" >> data.js
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add data.js
-          git commit -m "Confirmar cambios locales en data.js" || echo "Sin cambios para confirmar"
-
-      - name: Sincronizar con el repositorio remoto
-        run: |
-          git fetch origin master
-          git rebase origin/master || git rebase --abort
-
-      - name: Subir cambios al repositorio
-        run: |
-          git push origin master
+          git commit -m "Actualizar data.js con los últimos datos del dólar"
+          git push
