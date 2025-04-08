@@ -10,8 +10,6 @@ on:
     - cron: '30 16 * * *' # 12:30 PM Venezuela
     - cron: '45 16 * * *' # 12:45 PM Venezuela
     - cron: '10 17 * * *' # 1:10 PM Venezuela
-    
-    
 
 jobs:
   dolar_oficial:
@@ -27,6 +25,9 @@ jobs:
 
       - name: Instalar dependencias
         run: npm install --unsafe-perm
+
+      - name: Instalar Puppeteer manualmente
+        run: npx puppeteer install
 
       - name: Ejecutar scraping del dólar oficial
         run: node server.js --oficial
@@ -44,6 +45,9 @@ jobs:
 
       - name: Instalar dependencias
         run: npm install --unsafe-perm
+
+      - name: Instalar Puppeteer manualmente
+        run: npx puppeteer install
 
       - name: Ejecutar scraping del dólar paralelo
         run: node server.js --paralelo
