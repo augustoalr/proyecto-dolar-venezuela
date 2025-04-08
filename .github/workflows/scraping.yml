@@ -42,6 +42,7 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
+          git pull origin master --rebase # Traer los cambios remotos antes de hacer push
           git add data.js
           git commit -m "Actualizar data.js con los últimos datos del dólar"
           git push
@@ -75,6 +76,7 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
+          git pull origin master --rebase # Traer los cambios remotos antes de hacer push
           git add data.js
           git commit -m "Actualizar data.js con los últimos datos del dólar"
           git push
