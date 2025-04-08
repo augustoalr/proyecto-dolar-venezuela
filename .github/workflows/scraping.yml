@@ -35,6 +35,17 @@ jobs:
       - name: Ejecutar scraping del dólar oficial
         run: node server.js --oficial
 
+      - name: Forzar cambios en data.js
+        run: echo "// Actualización forzada $(date)" >> data.js
+
+      - name: Subir cambios al repositorio
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add data.js
+          git commit -m "Actualizar data.js con los últimos datos del dólar"
+          git push
+
   dolar_paralelo:
     runs-on: ubuntu-latest
     steps:
@@ -56,6 +67,9 @@ jobs:
 
       - name: Ejecutar scraping del dólar paralelo
         run: node server.js --paralelo
+
+      - name: Forzar cambios en data.js
+        run: echo "// Actualización forzada $(date)" >> data.js
 
       - name: Subir cambios al repositorio
         run: |
