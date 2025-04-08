@@ -27,7 +27,7 @@ jobs:
         run: npm install --unsafe-perm
 
       - name: Instalar Puppeteer manualmente
-        run: npx puppeteer install
+        run: npx puppeteer install --unsafe-perm
 
       - name: Ejecutar scraping del dólar oficial
         run: node server.js --oficial
@@ -47,7 +47,7 @@ jobs:
         run: npm install --unsafe-perm
 
       - name: Instalar Puppeteer manualmente
-        run: npx puppeteer install
+        run: npx puppeteer install --unsafe-perm
 
       - name: Ejecutar scraping del dólar paralelo
         run: node server.js --paralelo
