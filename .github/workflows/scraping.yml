@@ -24,7 +24,9 @@ jobs:
           node-version: '18'
 
       - name: Configurar Puppeteer para omitir la descarga de Chromium
-        run: npm config set puppeteer_skip_download true
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: "true"
+        run: echo "Configurado PUPPETEER_SKIP_DOWNLOAD=true"
 
       - name: Instalar dependencias
         run: npm install
@@ -44,7 +46,9 @@ jobs:
           node-version: '18'
 
       - name: Configurar Puppeteer para omitir la descarga de Chromium
-        run: npm config set puppeteer_skip_download true
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: "true"
+        run: echo "Configurado PUPPETEER_SKIP_DOWNLOAD=true"
 
       - name: Instalar dependencias
         run: npm install
