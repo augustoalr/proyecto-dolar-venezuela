@@ -3,6 +3,19 @@ const fs = require('fs');
 const cron = require('node-cron');
 const moment = require('moment-timezone');
 
+// Simulación de datos obtenidos del scraping
+const data = {
+  dolar_oficial: 72.1856,
+  dolar_promedio: 84.7928,
+  dolar_paralelo: 97.4,
+  ultima_actualizacion: new Date().toISOString(),
+  ultima_actualizacion_hora: new Date().toLocaleTimeString('es-VE')
+};
+
+// Escribir los datos en data.js
+fs.writeFileSync('data.js', `const data = ${JSON.stringify(data, null, 2)};`, 'utf8');
+console.log('Archivo data.js actualizado correctamente.');
+
 // Función para obtener el dólar oficial
 async function obtenerDolarOficial() {
   try {
