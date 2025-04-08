@@ -12,7 +12,6 @@ on:
     - cron: '10 17 * * *' # 1:10 PM Venezuela
     
     
- 
 
 jobs:
   dolar_oficial:
@@ -24,10 +23,10 @@ jobs:
       - name: Configurar Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '18'
 
       - name: Instalar dependencias
-        run: npm install
+        run: npm install --unsafe-perm
 
       - name: Ejecutar scraping del dólar oficial
         run: node server.js --oficial
@@ -41,10 +40,10 @@ jobs:
       - name: Configurar Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '18'
 
       - name: Instalar dependencias
-        run: npm install
+        run: npm install --unsafe-perm
 
       - name: Ejecutar scraping del dólar paralelo
         run: node server.js --paralelo
