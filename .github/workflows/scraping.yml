@@ -1,6 +1,7 @@
 name: Actualizar Dólar
 
 on:
+  workflow_dispatch: # Habilita la ejecución manual
   schedule:
     # Horario para el dólar oficial (5:02 PM Venezuela)
     - cron: '2 21 * * *'
