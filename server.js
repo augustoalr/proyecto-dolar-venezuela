@@ -13,7 +13,8 @@ const data = {
 };
 
 // Escribir los datos en data.js
-fs.writeFileSync('data.js', `const data = ${JSON.stringify(data, null, 2)};`, 'utf8');
+const contenido = `window.data = ${JSON.stringify(data, null, 2)};`;
+fs.writeFileSync('data.js', contenido, 'utf8');
 console.log('Archivo data.js actualizado correctamente.');
 
 // Función para obtener el dólar oficial

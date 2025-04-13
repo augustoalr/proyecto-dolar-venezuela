@@ -15,68 +15,64 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Clonar el repositorio
+      - name: Checkout repository
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Configurar Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-          cache: 'npm'
 
-      - name: Configurar Puppeteer para omitir la descarga de Chromium
-        env:
-          PUPPETEER_SKIP_DOWNLOAD: "true"
-        run: echo "Configurado PUPPETEER_SKIP_DOWNLOAD=true"
-
-      - name: Instalar dependencias
+      - name: Install dependencies
         run: npm install
 
-      - name: Ejecutar scraping del dólar oficial
+      - name: Run scraping
         run: node server.js --oficial
 
-      - name: Forzar cambios en data.js
+      - name: Configure Git
         run: |
-          echo "// Actualización forzada $(date)" >> data.js
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+
+      - name: Update and commit changes
+        run: |
           git add data.js
-          git commit -m "Actualizar data.js con los últimos datos del dólar"
-          git push
+          git commit -m "Update dollar rates" || echo "No changes to commit"
+          git pull --rebase origin master
+          git push origin master
 
   dolar_paralelo:
+    needs: dolar_oficial
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - name: Clonar el repositorio
+      - name: Checkout repository
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Configurar Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      - name: Configurar Puppeteer para omitir la descarga de Chromium
-        env:
-          PUPPETEER_SKIP_DOWNLOAD: "true"
-        run: echo "Configurado PUPPETEER_SKIP_DOWNLOAD=true"
-
-      - name: Instalar dependencias
+      - name: Install dependencies
         run: npm install
 
-      - name: Ejecutar scraping del dólar paralelo
+      - name: Run scraping
         run: node server.js --paralelo
 
-      - name: Forzar cambios en data.js
+      - name: Configure Git
         run: |
-          echo "// Actualización forzada $(date)" >> data.js
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+
+      - name: Update and commit changes
+        run: |
           git add data.js
-          git commit -m "Actualizar data.js con los últimos datos del dólar"
-          git push
+          git commit -m "Update parallel dollar rates" || echo "No changes to commit"
+          git pull --rebase origin master
+          git push origin master
