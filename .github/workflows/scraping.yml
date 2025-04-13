@@ -19,6 +19,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -31,20 +32,24 @@ jobs:
       - name: Run scraping
         run: node server.js --oficial
 
-      - name: Configure Git
+      - name: Update repository
         run: |
+          # Configure Git
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
-
-      - name: Update and commit changes
-        run: |
+          
+          # Pull latest changes
+          git pull origin master
+          
+          # Add and commit changes
           git add data.js
           git commit -m "Update dollar rates" || echo "No changes to commit"
-          git pull --rebase origin master
+          
+          # Push changes
           git push origin master
 
   dolar_paralelo:
-    needs: dolar_oficial
+    if: ${{ success() }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -53,6 +58,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -65,14 +71,18 @@ jobs:
       - name: Run scraping
         run: node server.js --paralelo
 
-      - name: Configure Git
+      - name: Update repository
         run: |
+          # Configure Git
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
-
-      - name: Update and commit changes
-        run: |
+          
+          # Pull latest changes
+          git pull origin master
+          
+          # Add and commit changes
           git add data.js
           git commit -m "Update parallel dollar rates" || echo "No changes to commit"
-          git pull --rebase origin master
+          
+          # Push changes
           git push origin master
