@@ -32,18 +32,24 @@ jobs:
       - name: Run scraping
         run: node server.js --oficial
 
-      - name: Update repository
+      - name: Git Operations
         run: |
+          # Stash any local changes
+          git stash
+
           # Configure Git
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
           
-          # Pull latest changes
+          # Get latest changes
           git pull origin master
           
-          # Add and commit changes
+          # Restore our changes
+          git stash pop
+          
+          # Add and commit
           git add data.js
-          git commit -m "Update dollar rates" || echo "No changes to commit"
+          git commit -m "Update dollar rates [skip ci]"
           
           # Push changes
           git push origin master

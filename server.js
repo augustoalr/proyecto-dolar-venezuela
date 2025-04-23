@@ -12,10 +12,10 @@ const data = {
   ultima_actualizacion_hora: new Date().toLocaleTimeString('es-VE')
 };
 
-// Escribir los datos en data.js
-const contenido = `window.data = ${JSON.stringify(data, null, 2)};`;
-fs.writeFileSync('data.js', contenido, 'utf8');
-console.log('Archivo data.js actualizado correctamente.');
+// When writing to data.js, ensure we use the correct format
+const fileContent = `window.data = ${JSON.stringify(data, null, 2)};`;
+fs.writeFileSync('data.js', fileContent, 'utf8');
+console.log('Data written to data.js:', data);
 
 // Función para obtener el dólar oficial
 async function obtenerDolarOficial() {

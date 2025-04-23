@@ -1,4 +1,4 @@
-windows.data = {
+window.data = {
   "dolar_oficial": 72.1856,
   "dolar_promedio": 84.7928,
   "dolar_paralelo": 97.4,
