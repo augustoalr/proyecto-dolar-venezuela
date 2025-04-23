@@ -32,30 +32,27 @@ jobs:
       - name: Run scraping
         run: node server.js --oficial
 
-      - name: Git Operations
+      - name: Update repository
         run: |
-          # Stash any local changes
-          git stash
-
+          # Save current date for commit message
+          DATE=$(date '+%Y-%m-%d %H:%M:%S')
+          
           # Configure Git
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
           
-          # Get latest changes
-          git pull origin master
-          
-          # Restore our changes
-          git stash pop
-          
-          # Add and commit
+          # Stage changes and create temporary commit
           git add data.js
-          git commit -m "Update dollar rates [skip ci]"
+          git commit -m "Temporary commit" || echo "No changes to commit"
+          
+          # Pull latest changes with rebase
+          git pull --rebase origin master
           
           # Push changes
           git push origin master
 
   dolar_paralelo:
-    if: ${{ success() }}
+    needs: dolar_oficial
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -79,16 +76,19 @@ jobs:
 
       - name: Update repository
         run: |
+          # Save current date for commit message
+          DATE=$(date '+%Y-%m-%d %H:%M:%S')
+          
           # Configure Git
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
           
-          # Pull latest changes
-          git pull origin master
-          
-          # Add and commit changes
+          # Stage changes and create temporary commit
           git add data.js
-          git commit -m "Update parallel dollar rates" || echo "No changes to commit"
+          git commit -m "Temporary commit" || echo "No changes to commit"
+          
+          # Pull latest changes with rebase
+          git pull --rebase origin master
           
           # Push changes
           git push origin master
