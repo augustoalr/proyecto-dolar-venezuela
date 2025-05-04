@@ -79,11 +79,11 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        run: |
-          npm install
-          npx puppeteer browsers install chrome
-
+        run: npm install
+  
       - name: Run scraping
+        env:
+          CHROME_PATH: ${{ env.CHROME_PATH }}
         run: node server.js --paralelo
 
       - name: Git operations
