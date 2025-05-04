@@ -15,7 +15,7 @@ async function obtenerDolarOficial() {
 
     console.log('CHROME_PATH:', process.env.CHROME_PATH);
     const browser = await puppeteer.launch({
-      // executablePath: process.env.CHROME_PATH, // ¡Esto es CLAVE!
+       executablePath: process.env.CHROME_PATH, // ¡Esto es CLAVE!
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
       headless: true
     });
@@ -64,6 +64,7 @@ async function obtenerDolarOficial() {
 // Función para obtener el dólar paralelo
 async function obtenerDolarParalelo() {
   try {
+    console.log('CHROME_PATH:', process.env.CHROME_PATH);
     const executablePath = process.env.CHROME_PATH || require('puppeteer').executablePath();
 
     console.log('CHROME_PATH:', process.env.CHROME_PATH);
@@ -130,4 +131,4 @@ if (args.includes('--oficial')) {
   console.log('Por favor, especifica --oficial, --paralelo o --promedio como argumento.')
 
 
-}	
+}
