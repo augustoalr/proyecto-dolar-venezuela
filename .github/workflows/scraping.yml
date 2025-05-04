@@ -29,6 +29,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Install Puppeteer Chrome
+        run: npx puppeteer browsers install chrome
+
       - name: Run scraping
         run: node server.js --oficial
 
@@ -47,6 +50,9 @@ jobs:
           
           # Pull latest changes with rebase
           git pull --rebase origin master
+
+          # Apply stashed changes (if any)
+          git stash pop || echo "No stash to apply"
           
           # Push changes
           git push origin master
@@ -71,24 +77,20 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Install Puppeteer Chrome
+        run: npx puppeteer browsers install chrome
+
       - name: Run scraping
         run: node server.js --paralelo
 
       - name: Update repository
         run: |
-          # Save current date for commit message
           DATE=$(date '+%Y-%m-%d %H:%M:%S')
-          
-          # Configure Git
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
-          
-          # Stage changes and create temporary commit
           git add data.js
           git commit -m "Temporary commit" || echo "No changes to commit"
-          
-          # Pull latest changes with rebase
+          git stash || echo "Nothing to stash"
           git pull --rebase origin master
-          
-          # Push changes
+          git stash pop || echo "No stash to apply"
           git push origin master
