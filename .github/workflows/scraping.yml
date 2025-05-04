@@ -12,6 +12,8 @@ on:
 jobs:
   dolar_oficial:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -34,28 +36,24 @@ jobs:
 
       - name: Update repository
         run: |
-          # Guardar la fecha actual para el mensaje de commit
-          DATE=$(date '+%Y-%m-%d %H:%M:%S')
-          
           # Configurar Git
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
           
-          # Agregar cambios y crear un commit temporal (si hay cambios)
+          # Obtener cambios remotos primero
+          git fetch origin master
+          
+          # Guardar cambios locales en data.js
           git add data.js
-          git commit -m "Temporary commit" || echo "No changes to commit"
           
-          # Guardar cambios locales en un stash para evitar conflictos
-          git stash --include-untracked
+          # Crear commit con los cambios
+          git commit -m "Update dollar rates $(date '+%Y-%m-%d %H:%M:%S')"
           
-          # Pull de los últimos cambios con rebase
-          git pull --rebase origin master
+          # Rebase con los cambios remotos
+          git rebase origin/master
           
-          # Aplicar de nuevo los cambios guardados en el stash
-          git stash pop || echo "No stashed changes to apply"
-          
-          # Push de los cambios al repositorio
-          git push origin master
+          # Push forzado para asegurar que los cambios se suban
+          git push -f origin master
 
   dolar_paralelo:
     needs: dolar_oficial
@@ -75,22 +73,30 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        run: npm install
-
-      - name: Install Puppeteer Chrome
-        run: npx puppeteer browsers install chrome
+        run: |
+          npm install
+          npx puppeteer browsers install chrome
 
       - name: Run scraping
         run: node server.js --paralelo
 
       - name: Update repository
         run: |
-          DATE=$(date '+%Y-%m-%d %H:%M:%S')
+          # Configurar Git
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
+          
+          # Obtener cambios remotos primero
+          git fetch origin master
+          
+          # Guardar cambios locales en data.js
           git add data.js
-          git commit -m "Temporary commit" || echo "No changes to commit"
-          git stash || echo "Nothing to stash"
-          git pull --rebase origin master
-          git stash pop || echo "No stash to apply"
-          git push origin master
+          
+          # Crear commit con los cambios
+          git commit -m "Update dollar rates $(date '+%Y-%m-%d %H:%M:%S')"
+          
+          # Rebase con los cambios remotos
+          git rebase origin/master
+          
+          # Push forzado para asegurar que los cambios se suban
+          git push -f origin master
