@@ -3,11 +3,11 @@ name: Actualizar Dólar
 on:
   workflow_dispatch:
   schedule:
-    - cron: '2 21 * * *'
-    - cron: '0 16 * * *'
-    - cron: '30 16 * * *'
-    - cron: '45 16 * * *'
-    - cron: '10 17 * * *'
+    - cron: "2 21 * * *"
+    - cron: "0 16 * * *"
+    - cron: "30 16 * * *"
+    - cron: "45 16 * * *"
+    - cron: "10 17 * * *"
 
 jobs:
   dolar_oficial:
@@ -28,7 +28,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: "18"
 
       - name: Install dependencies
         run: npm install
@@ -40,20 +40,12 @@ jobs:
 
       - name: Git operations
         run: |
-          # Configure Git
           git config --global user.name "GitHub Actions Bot"
           git config --global user.email "actions@github.com"
-          
-          # Ensure we're on the latest master
           git fetch origin master
-          
-          # Force add any changes to data.js
+          # Aquí ejecutas el scraping, que modifica data.js
           git add -f data.js
-          
-          # Create commit
-          git commit -m "Update dollar rates [skip ci]"
-          
-          # Force push to master
+          git commit -m "Update dollar rates [skip ci]" || echo "No changes to commit"
           git push -f origin master
 
   dolar_paralelo:
@@ -76,30 +68,23 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: "18"
 
       - name: Install dependencies
         run: npm install
-  
+
       - name: Run scraping
         env:
           CHROME_PATH: ${{ env.CHROME_PATH }}
         run: node server.js --oficial
-        
+
       - name: Git operations
         run: |
-          # Configure Git
           git config --global user.name "GitHub Actions Bot"
           git config --global user.email "actions@github.com"
-          
-          # Ensure we're on the latest master
           git fetch origin master
-          
-          # Force add any changes to data.js
+          # Aquí ejecutas el scraping, que modifica data.js
           git add -f data.js
-          
-          # Create commit
-          git commit -m "Update parallel dollar rates [skip ci]"
-          
-          # Force push to master
+          git commit -m "Update dollar rates [skip ci]" || echo "No changes to commit"
           git push -f origin master
+
