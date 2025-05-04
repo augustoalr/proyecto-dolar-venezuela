@@ -23,6 +23,8 @@ jobs:
 
       - name: Setup Chrome
         uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -30,28 +32,30 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        run: npm install
-
+        run: |
+          npm install
+          npx puppeteer browsers install chrome
+          
       - name: Run scraping
         run: node server.js --oficial
 
-      - name: Update repository
+      - name: Git operations
         run: |
           # Configure Git
-          git config user.name "GitHub Actions Bot"
-          git config user.email "actions@github.com"
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
           
-          # Add all changes
-          git add -A
+          # Ensure we're on the latest master
+          git fetch origin master
           
-          # Commit changes
-          git commit -m "Update dollar rates" || echo "No changes to commit"
+          # Force add any changes to data.js
+          git add -f data.js
           
-          # Pull with auto-stash
-          git -c rebase.autoStash=true pull --rebase origin master
+          # Create commit
+          git commit -m "Update dollar rates [skip ci]"
           
-          # Push changes
-          git push origin master
+          # Force push to master
+          git push -f origin master
 
   dolar_paralelo:
     needs: dolar_oficial
@@ -67,6 +71,8 @@ jobs:
 
       - name: Setup Chrome
         uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -74,25 +80,27 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm install
+          npx puppeteer browsers install chrome
 
       - name: Run scraping
         run: node server.js --paralelo
 
-      - name: Update repository
+      - name: Git operations
         run: |
           # Configure Git
-          git config user.name "GitHub Actions Bot"
-          git config user.email "actions@github.com"
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
           
-          # Add all changes
-          git add -A
+          # Ensure we're on the latest master
+          git fetch origin master
           
-          # Commit changes
-          git commit -m "Update dollar rates" || echo "No changes to commit"
+          # Force add any changes to data.js
+          git add -f data.js
           
-          # Pull with auto-stash
-          git -c rebase.autoStash=true pull --rebase origin master
+          # Create commit
+          git commit -m "Update parallel dollar rates [skip ci]"
           
-          # Push changes
-          git push origin master
+          # Force push to master
+          git push -f origin master
