@@ -15,7 +15,7 @@ async function obtenerDolarOficial() {
 
     console.log('CHROME_PATH:', process.env.CHROME_PATH);
     const browser = await puppeteer.launch({
-      executablePath: process.env.CHROME_PATH, // ¡Esto es CLAVE!
+      // executablePath: process.env.CHROME_PATH, // ¡Esto es CLAVE!
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
       headless: true
     });
@@ -68,7 +68,7 @@ async function obtenerDolarParalelo() {
 
     console.log('CHROME_PATH:', process.env.CHROME_PATH);
     const browser = await puppeteer.launch({
-      executablePath: process.env.CHROME_PATH, // ¡Esto es CLAVE!
+      // executablePath: process.env.CHROME_PATH, // ¡Esto es CLAVE!
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
       headless: true
     });
