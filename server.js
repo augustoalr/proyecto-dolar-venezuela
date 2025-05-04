@@ -12,13 +12,12 @@ function guardarDataJS(data) {
 async function obtenerDolarOficial() {
   try {
     console.log('Iniciando scraping del dólar oficial...');
-    const executablePath = process.env.CHROME_PATH || require('puppeteer').executablePath();
 
-    const browser = await puppeteer.launch({
-      executablePath: process.env.CHROME_PATH, // ¡Esto es CLAVE!
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      headless: true
-    });
+   const browser = await puppeteer.launch({
+  executablePath: process.env.CHROME_PATH, // ¡Esto es CLAVE!
+  args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  headless: true
+});
 
     console.log('Navegador iniciado.');
     const page = await browser.newPage();
@@ -67,7 +66,7 @@ async function obtenerDolarParalelo() {
     const executablePath = process.env.CHROME_PATH || require('puppeteer').executablePath();
 
     const browser = await puppeteer.launch({
-      executablePath,
+      executablePath: process.env.CHROME_PATH,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
       headless: true
     });
