@@ -15,7 +15,7 @@ async function obtenerDolarOficial() {
     const executablePath = process.env.CHROME_PATH || require('puppeteer').executablePath();
 
     const browser = await puppeteer.launch({
-      executablePath,
+      executablePath: process.env.CHROME_PATH, // ¡Esto es CLAVE!
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
       headless: true
     });
