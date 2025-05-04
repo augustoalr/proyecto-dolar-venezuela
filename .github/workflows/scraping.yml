@@ -21,39 +21,37 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v1
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
       - name: Install dependencies
-        run: |
-          npm install
-          npx puppeteer browsers install chrome
+        run: npm install
 
       - name: Run scraping
         run: node server.js --oficial
 
       - name: Update repository
         run: |
-          # Configurar Git
+          # Configure Git
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
           
-          # Obtener cambios remotos primero
-          git fetch origin master
+          # Add all changes
+          git add -A
           
-          # Guardar cambios locales en data.js
-          git add data.js
+          # Commit changes
+          git commit -m "Update dollar rates" || echo "No changes to commit"
           
-          # Crear commit con los cambios
-          git commit -m "Update dollar rates $(date '+%Y-%m-%d %H:%M:%S')"
+          # Pull with auto-stash
+          git -c rebase.autoStash=true pull --rebase origin master
           
-          # Rebase con los cambios remotos
-          git rebase origin/master
-          
-          # Push forzado para asegurar que los cambios se suban
-          git push -f origin master
+          # Push changes
+          git push origin master
 
   dolar_paralelo:
     needs: dolar_oficial
@@ -67,36 +65,34 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v1
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
       - name: Install dependencies
-        run: |
-          npm install
-          npx puppeteer browsers install chrome
+        run: npm install
 
       - name: Run scraping
         run: node server.js --paralelo
 
       - name: Update repository
         run: |
-          # Configurar Git
+          # Configure Git
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
           
-          # Obtener cambios remotos primero
-          git fetch origin master
+          # Add all changes
+          git add -A
           
-          # Guardar cambios locales en data.js
-          git add data.js
+          # Commit changes
+          git commit -m "Update dollar rates" || echo "No changes to commit"
           
-          # Crear commit con los cambios
-          git commit -m "Update dollar rates $(date '+%Y-%m-%d %H:%M:%S')"
+          # Pull with auto-stash
+          git -c rebase.autoStash=true pull --rebase origin master
           
-          # Rebase con los cambios remotos
-          git rebase origin/master
-          
-          # Push forzado para asegurar que los cambios se suban
-          git push -f origin master
+          # Push changes
+          git push origin master
