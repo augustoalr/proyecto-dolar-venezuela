@@ -13,11 +13,12 @@ async function obtenerDolarOficial() {
   try {
     console.log('Iniciando scraping del dólar oficial...');
 
-   const browser = await puppeteer.launch({
-  executablePath: process.env.CHROME_PATH, // ¡Esto es CLAVE!
-  args: ['--no-sandbox', '--disable-setuid-sandbox'],
-  headless: true
-});
+    console.log('CHROME_PATH:', process.env.CHROME_PATH);
+    const browser = await puppeteer.launch({
+      executablePath: process.env.CHROME_PATH, // ¡Esto es CLAVE!
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      headless: true
+    });
 
     console.log('Navegador iniciado.');
     const page = await browser.newPage();
@@ -65,8 +66,9 @@ async function obtenerDolarParalelo() {
   try {
     const executablePath = process.env.CHROME_PATH || require('puppeteer').executablePath();
 
+    console.log('CHROME_PATH:', process.env.CHROME_PATH);
     const browser = await puppeteer.launch({
-      executablePath: process.env.CHROME_PATH,
+      executablePath: process.env.CHROME_PATH, // ¡Esto es CLAVE!
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
       headless: true
     });
@@ -125,7 +127,7 @@ if (args.includes('--oficial')) {
     }
   })();
 } else {
-  console.log('Por favor, especifica --oficial, --paralelo o --promedio como argumento.');
-}
+  console.log('Por favor, especifica --oficial, --paralelo o --promedio como argumento.')
 
 
+}	

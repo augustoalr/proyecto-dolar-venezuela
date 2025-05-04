@@ -85,6 +85,7 @@ jobs:
         env:
           CHROME_PATH: ${{ env.CHROME_PATH }}
         run: node server.js --oficial
+        
       - name: Git operations
         run: |
           # Configure Git
