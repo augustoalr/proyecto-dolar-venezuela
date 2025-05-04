@@ -36,7 +36,14 @@ jobs:
       - name: Run scraping
         env:
           CHROME_PATH: ${{ env.CHROME_PATH }}
-        run: node server.js --oficial
+        run: |
+          console.log('Lanzando Puppeteer con CHROME_PATH:', process.env.CHROME_PATH);
+          const browser = await puppeteer.launch({
+            executablePath: process.env.CHROME_PATH,
+            args: ['--no-sandbox', '--disable-setuid-sandbox'],
+            headless: true
+          });
+          node server.js --oficial
 
       - name: Git operations
         run: |
@@ -84,7 +91,14 @@ jobs:
       - name: Run scraping
         env:
           CHROME_PATH: ${{ env.CHROME_PATH }}
-        run: node server.js --paralelo
+        run: |
+          console.log('Lanzando Puppeteer con CHROME_PATH:', process.env.CHROME_PATH);
+          const browser = await puppeteer.launch({
+            executablePath: process.env.CHROME_PATH,
+            args: ['--no-sandbox', '--disable-setuid-sandbox'],
+            headless: true
+          });
+          node server.js --paralelo
 
       - name: Git operations
         run: |
