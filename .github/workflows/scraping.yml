@@ -12,8 +12,6 @@ on:
 jobs:
   dolar_oficial:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -27,34 +25,36 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        run: npm install
-
-      - name: Install Puppeteer Chrome
-        run: npx puppeteer browsers install chrome
+        run: |
+          npm install
+          npx puppeteer browsers install chrome
 
       - name: Run scraping
         run: node server.js --oficial
 
       - name: Update repository
         run: |
-          # Save current date for commit message
+          # Guardar la fecha actual para el mensaje de commit
           DATE=$(date '+%Y-%m-%d %H:%M:%S')
           
-          # Configure Git
+          # Configurar Git
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
           
-          # Stage changes and create temporary commit
+          # Agregar cambios y crear un commit temporal (si hay cambios)
           git add data.js
           git commit -m "Temporary commit" || echo "No changes to commit"
           
-          # Pull latest changes with rebase
-          git pull --rebase origin master
-
-          # Apply stashed changes (if any)
-          git stash pop || echo "No stash to apply"
+          # Guardar cambios locales en un stash para evitar conflictos
+          git stash --include-untracked
           
-          # Push changes
+          # Pull de los últimos cambios con rebase
+          git pull --rebase origin master
+          
+          # Aplicar de nuevo los cambios guardados en el stash
+          git stash pop || echo "No stashed changes to apply"
+          
+          # Push de los cambios al repositorio
           git push origin master
 
   dolar_paralelo:
