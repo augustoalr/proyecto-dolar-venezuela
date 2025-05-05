@@ -131,8 +131,14 @@ if (args.includes('--oficial')) {
       console.log('No se puede calcular el dólar promedio. Asegúrate de haber actualizado el dólar oficial y paralelo.');
     }
   })();
+} else if (args.includes('--todo')) {
+  (async () => {
+    await obtenerDolarOficial();
+    await obtenerDolarParalelo();
+  })();
 } else {
   console.log('Por favor, especifica --oficial, --paralelo o --promedio como argumento.')
 
 
 }
+
