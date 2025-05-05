@@ -32,9 +32,8 @@ async function obtenerDolarOficial() {
 
     const dolarOficial = await page.evaluate(() => {
       const elemento = document.querySelector('#dolar .centrado strong');
-      return elemento ? elemento.textContent.trim() : null;
+      return elemento ? elemento.textContent.replace(/\s/g, '').replace(',', '.').trim() : null;
     });
-
     console.log('Valor extraído:', dolarOficial);
 
     await browser.close();
@@ -69,7 +68,7 @@ async function obtenerDolarParalelo() {
 
     console.log('CHROME_PATH:', process.env.CHROME_PATH);
     const browser = await puppeteer.launch({
-      // executablePath: process.env.CHROME_PATH, // ¡Esto es CLAVE!
+       executablePath: process.env.CHROME_PATH, // ¡Esto es CLAVE!
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
       headless: true
     });
@@ -81,6 +80,8 @@ async function obtenerDolarParalelo() {
       const elemento = document.querySelector('#precio-paralelo');
       return elemento ? elemento.textContent.trim() : null;
     });
+
+    console.log('Valor extraído:', dolarParalelo);
 
     await browser.close();
 

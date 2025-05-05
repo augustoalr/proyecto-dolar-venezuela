@@ -21,6 +21,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Chrome
+        id: setup-chrome
         uses: browser-actions/setup-chrome@v1
         with:
           chrome-version: stable
@@ -38,7 +39,7 @@ jobs:
 
       - name: Run scraping
         env:
-           CHROME_PATH: ${{ env.CHROME_PATH }}
+           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: node server.js --oficial
 
       - name: Git operations
@@ -64,6 +65,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Chrome
+        id: setup-chrome
         uses: browser-actions/setup-chrome@v1
         with:
            chrome-version: stable
@@ -78,7 +80,7 @@ jobs:
 
       - name: Run scraping
         env:
-           CHROME_PATH: ${{ env.CHROME_PATH }}
+           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: node server.js --oficial
 
       - name: Git operations
@@ -91,3 +93,4 @@ jobs:
           git commit -m "Update dollar rates [skip ci]" || echo "No changes to commit"
           git push -f origin master
 
+# ultima version  11:33am
