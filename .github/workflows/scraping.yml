@@ -81,7 +81,7 @@ jobs:
       - name: Run scraping
         env:
            CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
-        run: node server.js --paralelo
+        run: node server.js --oficial
 
       - name: Git operations
         run: |
