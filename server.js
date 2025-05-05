@@ -2,9 +2,19 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 const moment = require('moment-timezone');
 
-function guardarDataJS(data) {
-  const fileContent = `window.data = ${JSON.stringify(data, null, 2)};`;
-  fs.writeFileSync('data.js', fileContent, 'utf8');
+function guardarDataJS(parcial) {
+  let data = {};
+  if (fs.existsSync('data.js')) {
+    try {
+      const raw = fs.readFileSync('data.js', 'utf8');
+      data = eval(raw.replace('window.data =', '').replace(';', ''));
+    } catch (e) {
+      data = {};
+    }
+  }
+  Object.assign(data, parcial);
+  data.ultima_actualizacion_hora = moment().tz('America/Caracas').format('HH:mm:ss');
+  fs.writeFileSync('data.js', 'window.data = ' + JSON.stringify(data, null, 2) + ';', 'utf8');
   console.log('Data written to data.js:', data);
 }
 
@@ -40,18 +50,8 @@ async function obtenerDolarOficial() {
     console.log('Navegador cerrado.');
 
     if (dolarOficial) {
-      const data = fs.existsSync('data.json')
-        ? JSON.parse(fs.readFileSync('data.json', 'utf8'))
-        : {};
-      data.dolar_oficial = parseFloat(dolarOficial.replace(',', '.'));
-      if (data.dolar_paralelo) {
-        data.dolar_promedio = (data.dolar_oficial + data.dolar_paralelo) / 2;
-      }
-      //data.ultima_actualizacion = moment().tz('America/Caracas').toISOString();
-      data.ultima_actualizacion_hora = moment().tz('America/Caracas').format('HH:mm:ss');
-      fs.writeFileSync('data.json', JSON.stringify(data, null, 2), 'utf8');
-      guardarDataJS(data);
-      console.log('Dólar oficial actualizado:', data.dolar_oficial);
+      guardarDataJS({ dolar_oficial: parseFloat(dolarOficial.replace(',', '.')) });
+      console.log('Dólar oficial actualizado:', dolarOficial);
     } else {
       console.log('No se pudo encontrar el valor del dólar oficial.');
     }
@@ -84,12 +84,7 @@ async function obtenerDolarParalelo() {
     await page.goto('https://monitordolarvenezuela.com/precio-dolar-paralelo', { waitUntil: 'networkidle2' });
     console.log('Página cargada.');
 
-    //Espera a que el elemento con el id "precio-paralelo" esté disponible
-    // await page.waitForSelector('#precio-paralelo', { timeout: 10000 });
-    // const dolarParalelo = await page.evaluate(() => {
-    //   const elemento = document.querySelector('#precio-paralelo');
-    //   return elemento ? elemento.textContent.trim() : null;
-    // });
+  
 
     const dolarParalelo = await page.evaluate(() => {
       const elemento = document.querySelector('#precio-paralelo', { timeout: 10000 });
@@ -102,18 +97,10 @@ async function obtenerDolarParalelo() {
     console.log('Navegador cerrado.');
 
     if (dolarParalelo) {
-      const data = fs.existsSync('data.json')
-        ? JSON.parse(fs.readFileSync('data.json', 'utf8'))
-        : {};
-      data.dolar_paralelo = parseFloat(dolarParalelo.replace(',', '.'));
-      if (data.dolar_oficial) {
-        data.dolar_promedio = (data.dolar_oficial + data.dolar_paralelo) / 2;
-      }
-      // data.ultima_actualizacion = moment().tz('America/Caracas').toISOString();
-      data.ultima_actualizacion_hora = moment().tz('America/Caracas').format('HH:mm:ss');
-      fs.writeFileSync('data.json', JSON.stringify(data, null, 2), 'utf8');
-      guardarDataJS(data);
-      console.log('Dólar paralelo actualizado:', data.dolar_paralelo);
+      guardarDataJS({ dolar_paralelo: parseFloat(dolarParalelo.replace(',', '.')) });
+      console.log('Dólar paralelo actualizado:', dolarParalelo);
+    } else {
+      console.log('No se pudo encontrar el valor del dólar paralelo.');
     }
   } catch (error) {
     console.error('Error al hacer scraping del dólar paralelo:', error);
