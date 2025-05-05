@@ -1,4 +1,4 @@
 window.data = {
   "dolar_paralelo": 109.2,
-  "ultima_actualizacion_hora": "12:32:18"
+  "ultima_actualizacion_hora": "12:45:22"
 };
