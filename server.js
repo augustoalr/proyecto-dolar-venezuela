@@ -84,10 +84,9 @@ async function obtenerDolarParalelo() {
     await page.goto('https://monitordolarvenezuela.com/precio-dolar-paralelo', { waitUntil: 'networkidle2' });
     console.log('Página cargada.');
 
-  
-
+    await page.waitForSelector('#precio-paralelo', { timeout: 10000 });
     const dolarParalelo = await page.evaluate(() => {
-      const elemento = document.querySelector('#precio-paralelo', { timeout: 10000 });
+      const elemento = document.querySelector('#precio-paralelo');
       return elemento ? elemento.textContent.replace(/\s/g, '').replace(',', '.').trim() : null;
     });
 
@@ -120,9 +119,15 @@ if (args.includes('--oficial')) {
   })();
 } else if (args.includes('--promedio')) {
   (async () => {
-    const data = fs.existsSync('data.json')
-      ? JSON.parse(fs.readFileSync('data.json', 'utf8'))
-      : {};
+    let data = {};
+    if (fs.existsSync('data.js')) {
+      try {
+        const raw = fs.readFileSync('data.js', 'utf8');
+        data = eval(raw.replace('window.data =', '').replace(';', ''));
+      } catch (e) {
+        data = {};
+      }
+    }
     if (data.dolar_oficial && data.dolar_paralelo) {
       data.dolar_promedio = (data.dolar_oficial + data.dolar_paralelo) / 2;
       guardarDataJS(data);
