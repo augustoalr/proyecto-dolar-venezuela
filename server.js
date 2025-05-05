@@ -47,7 +47,7 @@ async function obtenerDolarOficial() {
       if (data.dolar_paralelo) {
         data.dolar_promedio = (data.dolar_oficial + data.dolar_paralelo) / 2;
       }
-      data.ultima_actualizacion = moment().tz('America/Caracas').toISOString();
+      //data.ultima_actualizacion = moment().tz('America/Caracas').toISOString();
       data.ultima_actualizacion_hora = moment().tz('America/Caracas').format('HH:mm:ss');
       fs.writeFileSync('data.json', JSON.stringify(data, null, 2), 'utf8');
       guardarDataJS(data);
@@ -63,8 +63,10 @@ async function obtenerDolarOficial() {
 // Función para obtener el dólar paralelo
 async function obtenerDolarParalelo() {
   try {
+    console.log('Iniciando scraping del dólar paralelo...');
+
     console.log('CHROME_PATH:', process.env.CHROME_PATH);
-    const executablePath = process.env.CHROME_PATH || require('puppeteer').executablePath();
+    //const executablePath = process.env.CHROME_PATH || require('puppeteer').executablePath();
 
     console.log('CHROME_PATH:', process.env.CHROME_PATH);
     const browser = await puppeteer.launch({
@@ -73,19 +75,31 @@ async function obtenerDolarParalelo() {
       headless: true
     });
 
+    console.log('Navegador iniciado.');
     const page = await browser.newPage();
+    console.log('Nueva página creada.');
+    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36');
+    console.log('User-Agent configurado.');
+
     await page.goto('https://monitordolarvenezuela.com/precio-dolar-paralelo', { waitUntil: 'networkidle2' });
+    console.log('Página cargada.');
 
     //Espera a que el elemento con el id "precio-paralelo" esté disponible
-    await page.waitForSelector('#precio-paralelo', { timeout: 10000 });
+    // await page.waitForSelector('#precio-paralelo', { timeout: 10000 });
+    // const dolarParalelo = await page.evaluate(() => {
+    //   const elemento = document.querySelector('#precio-paralelo');
+    //   return elemento ? elemento.textContent.trim() : null;
+    // });
+
     const dolarParalelo = await page.evaluate(() => {
-      const elemento = document.querySelector('#precio-paralelo');
-      return elemento ? elemento.textContent.trim() : null;
+      const elemento = document.querySelector('#precio-paralelo', { timeout: 10000 });
+      return elemento ? elemento.textContent.replace(/\s/g, '').replace(',', '.').trim() : null;
     });
 
     console.log('Valor extraído:', dolarParalelo);
 
     await browser.close();
+    console.log('Navegador cerrado.');
 
     if (dolarParalelo) {
       const data = fs.existsSync('data.json')
