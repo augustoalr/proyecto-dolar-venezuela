@@ -22,10 +22,9 @@ function guardarDataJS(parcial) {
 async function obtenerDolarOficial() {
   try {
     console.log('Iniciando scraping del dólar oficial...');
-
     console.log('CHROME_PATH:', process.env.CHROME_PATH);
     const browser = await puppeteer.launch({
-       executablePath: process.env.CHROME_PATH, // ¡Esto es CLAVE!
+      executablePath: process.env.CHROME_PATH,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
       headless: true
     });
@@ -66,10 +65,9 @@ async function obtenerDolarOficial() {
 async function obtenerDolarParalelo() {
   try {
     console.log('Iniciando scraping del dólar paralelo...');
-
     console.log('CHROME_PATH:', process.env.CHROME_PATH);
     const browser = await puppeteer.launch({
-       executablePath: process.env.CHROME_PATH, // ¡Esto es CLAVE!
+      executablePath: process.env.CHROME_PATH,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
       headless: true
     });
@@ -110,19 +108,14 @@ async function obtenerDolarParalelo() {
 // Detectar argumentos de línea de comandos
 const args = process.argv.slice(2);
 
-if (args.includes('--oficial')) {
+if (args.includes('--todo')) {
   (async () => {
-    const dolarOficial = await obtenerDolarOficial();
-    if (dolarOficial !== null) {
-      guardarDataJS({ dolar_oficial: dolarOficial });
-    }
-  })();
-} else if (args.includes('--paralelo')) {
-  (async () => {
-    const dolarParalelo = await obtenerDolarParalelo();
-    if (dolarParalelo !== null) {
-      guardarDataJS({ dolar_paralelo: dolarParalelo });
-    }
+    const dolar_oficial = await obtenerDolarOficial();
+    const dolar_paralelo = await obtenerDolarParalelo();
+    guardarDataJS({
+      dolar_oficial,
+      dolar_paralelo
+    });
   })();
 } else if (args.includes('--promedio')) {
   (async () => {
@@ -143,16 +136,7 @@ if (args.includes('--oficial')) {
       console.log('No se puede calcular el dólar promedio. Asegúrate de haber actualizado el dólar oficial y paralelo.');
     }
   })();
-} else if (args.includes('--todo')) {
-  (async () => {
-    const dolar_oficial = await obtenerDolarOficial();
-    const dolar_paralelo = await obtenerDolarParalelo();
-    guardarDataJS({
-      dolar_oficial,
-      dolar_paralelo
-    });
-  })();
 } else {
-  console.log('Por favor, especifica --oficial, --paralelo o --promedio como argumento.')
+  console.log('Por favor, ejecuta con --todo o --promedio como argumento.');
 }
 
