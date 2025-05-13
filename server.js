@@ -50,13 +50,15 @@ async function obtenerDolarOficial() {
     console.log('Navegador cerrado.');
 
     if (dolarOficial) {
-      guardarDataJS({ dolar_oficial: parseFloat(dolarOficial.replace(',', '.')) });
       console.log('Dólar oficial actualizado:', dolarOficial);
+      return parseFloat(dolarOficial.replace(',', '.'));
     } else {
       console.log('No se pudo encontrar el valor del dólar oficial.');
+      return null;
     }
   } catch (error) {
     console.error('Error al hacer scraping del dólar oficial:', error);
+    return null;
   }
 }
 
@@ -64,9 +66,6 @@ async function obtenerDolarOficial() {
 async function obtenerDolarParalelo() {
   try {
     console.log('Iniciando scraping del dólar paralelo...');
-
-    console.log('CHROME_PATH:', process.env.CHROME_PATH);
-    //const executablePath = process.env.CHROME_PATH || require('puppeteer').executablePath();
 
     console.log('CHROME_PATH:', process.env.CHROME_PATH);
     const browser = await puppeteer.launch({
@@ -96,13 +95,15 @@ async function obtenerDolarParalelo() {
     console.log('Navegador cerrado.');
 
     if (dolarParalelo) {
-      guardarDataJS({ dolar_paralelo: parseFloat(dolarParalelo.replace(',', '.')) });
       console.log('Dólar paralelo actualizado:', dolarParalelo);
+      return parseFloat(dolarParalelo.replace(',', '.'));
     } else {
       console.log('No se pudo encontrar el valor del dólar paralelo.');
+      return null;
     }
   } catch (error) {
     console.error('Error al hacer scraping del dólar paralelo:', error);
+    return null;
   }
 }
 
@@ -111,11 +112,17 @@ const args = process.argv.slice(2);
 
 if (args.includes('--oficial')) {
   (async () => {
-    await obtenerDolarOficial();
+    const dolarOficial = await obtenerDolarOficial();
+    if (dolarOficial !== null) {
+      guardarDataJS({ dolar_oficial: dolarOficial });
+    }
   })();
 } else if (args.includes('--paralelo')) {
   (async () => {
-    await obtenerDolarParalelo();
+    const dolarParalelo = await obtenerDolarParalelo();
+    if (dolarParalelo !== null) {
+      guardarDataJS({ dolar_paralelo: dolarParalelo });
+    }
   })();
 } else if (args.includes('--promedio')) {
   (async () => {
@@ -138,12 +145,14 @@ if (args.includes('--oficial')) {
   })();
 } else if (args.includes('--todo')) {
   (async () => {
-    await obtenerDolarOficial();
-    await obtenerDolarParalelo();
+    const dolar_oficial = await obtenerDolarOficial();
+    const dolar_paralelo = await obtenerDolarParalelo();
+    guardarDataJS({
+      dolar_oficial,
+      dolar_paralelo
+    });
   })();
 } else {
   console.log('Por favor, especifica --oficial, --paralelo o --promedio como argumento.')
-
-
 }
 
