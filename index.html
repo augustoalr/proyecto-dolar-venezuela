@@ -28,10 +28,48 @@
       <h2>Dólar Paralelo</h2>
       <p class="price">Cargando...</p>
     </div>
+
+    <!-- Dentro de <main>, después de las tarjetas existentes -->
+<div class="card">
+  <h2>Calculadoras</h2>
+  
+  <!-- Calculadora Dólar Promedio -->
+  <div class="calculator">
+    <label for="bsd-promedio">BsD a USD (Promedio)</label>
+    <input type="number" id="bsd-promedio" placeholder="Ingresa BsD" min="0" step="0.01">
+    <div class="result">= <span id="resultado-promedio">0.00</span> USD</div>
+    <small>Tasa: <span id="tasa-promedio">0.00</span> BsD/USD</small>
+  </div>
+
+  <!-- Calculadora de venta -->
+  <div class="calculator highlight">
+    <h1>VENTA</h1>
+    <label for="usd-venta">USD a BsD (Promedio)</label>
+    <input type="number" id="usd-venta" placeholder="Ingresa USD" min="0" step="0">
+    <div class="result">= <span id="resultado-venta">0.00</span> BsD</div>
+    <small>Tasa: <span id="tasa-venta">0.00</span> USD/BsD</small>
+  </div>
+
+  <!-- Calculadora Dólar BCV (Oficial) -->
+  <div class="calculator" style="margin-top: 1.5rem;">
+    <label for="bsd-bcv">BsD a USD (BCV Oficial)</label>
+    <input type="number" id="bsd-bcv" placeholder="Ingresa BsD" min="0" step="0.01">
+    <div class="result">= <span id="resultado-bcv">0.00</span> USD</div>
+    <small>Tasa: <span id="tasa-bcv">0.00</span> BsD/USD</small>
+  </div>
+</div>
+
+<!-- Después de las calculadoras -->
+<div class="card news-card">
+  <h2>Noticias del Dólar</h2>
+  <div id="news-feed" class="news-feed">
+    <!-- Las noticias se cargarán aquí dinámicamente -->
+  </div>
+  <p class="news-source">Fuente: <a href="https://newsapi.org/" target="_blank">NewsAPI</a></p>
+</div>
   </main>
 
   <footer>
-    <p>Última actualización: <span id="ultima-actualizacion">Desconocida</span></p>
     <p>Hora del último chequeo: <span id="ultima-actualizacion-hora">Desconocida</span></p>
   </footer>
 

@@ -1,67 +1,242 @@
-/* Estilos generales */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f9;
-    color: #333;
-  }
+:root {
+  /* Psicología del color: Azul = Confianza/Tranquilidad, Dorado = Elegancia */
+  --primary: #2a5c99;    /* Azul corporativo (seguridad) */
+  --secondary: #d4af37;  /* Dorado (sofisticación) */
+  --light-bg: #f8f9fa;   /* Fondo claro (legibilidad) */
+  --text-dark: #343a40;  /* Texto principal */
+  --text-light: #ffffff; /* Texto claro */
+  --success: #28a745;    /* Verde (positivo/éxito) */
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sutil profundidad */
+}
 
+/* Reset moderno */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif; /* Tipografía profesional */
+}
+
+body {
+  background-color: var(--light-bg);
+  color: var(--text-dark);
+  line-height: 1.6;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-image: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%); /* Degradado sutil */
+}
+
+header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: var(--primary);
+  color: var(--text-light);
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease;
+}
+
+header:hover {
+  transform: translateY(-5px); /* Efecto hover dinámico */
+}
+
+header h1 {
+  font-weight: 700;
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.5px;
+}
+
+header p {
+  opacity: 0.9;
+  font-size: 1.1rem;
+}
+
+main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.card {
+  overflow: hidden; /* Contiene a los hijos */
+  width: 100%;
+  max-width: 600px; /* Ajusta según tu diseño */
+  margin: 0 auto; 
+  background: white;
+  border-radius: 10px;
+  padding: 1.8rem;
   
-  
-  header {
-    text-align: center;
-    padding: 20px;
-    background-color: #007bff;
-    color: white;
-  }
-  
+  text-align: center;
+  box-shadow: var(--shadow);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border-top: 4px solid var(--secondary); /* Acento de elegancia */
+}
+
+
+
+.card:hover {
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+  transform: translateY(-8px);
+}
+
+.card h1 {
+  font-size: 1.4rem;
+  color: var(--secondary);
+  margin-bottom: 0.5rem;
+}
+
+.card h2 {
+  color: var(--primary);
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.card .price {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin: 1rem 0;
+  position: relative;
+}
+
+.card .price::after {
+  content: '';
+  display: block;
+  width: 50px;
+  height: 3px;
+  background: var(--secondary);
+  margin: 0.5rem auto;
+  border-radius: 2px;
+}
+
+footer {
+  text-align: center;
+  margin-top: 3rem;
+  padding: 1.5rem;
+  color: var(--text-dark);
+  font-size: 0.9rem;
+  width: 100%;
+}
+
+/* Efectos de carga profesional */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.card:nth-child(1) { animation-delay: 0.1s; }
+.card:nth-child(2) { animation-delay: 0.3s; }
+.card:nth-child(3) { animation-delay: 0.5s; }
+
+/* Responsive Design */
+@media (max-width: 768px) {
   main {
-    display: flex;
-    justify-content: space-around;
-    padding: 20px;
+    flex-direction: column;
+    align-items: center;
   }
   
   .card {
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    width: 30%;
-    text-align: center;
-    animation: fadeIn 1s ease-in-out;
+    max-width: 100%;
   }
+}
 
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  .card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
-  }
+
+/* Estilos para la calculadora */
+/* Mejoras para múltiples calculadoras */
+.calculator {
   
-  .card h2 {
-    margin: 0;
-    font-size: 1.5em;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  border: 1px solid #eee;
+}
+
+/* Calculadora destacada (Venta) */
+.calculator.highlight {
+  border: 2px solid var(--secondary);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.15);
+}
+.calculator label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.calculator + .calculator {
+  border-top: 2px solid #eee;
+  padding-top: 1.5rem;
+}
+
+/* news-feed.css */
+.news-card {
+  width: 100%;
+  padding: 1.5rem;
+  box-sizing: border-box;
+}
+
+.news-feed {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  overflow: visible; /* Permite scroll interno si es necesario */
+}
+.news-article {
+  background: white;
+  border-radius: 8px;
+  padding: 1.2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.news-article:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.news-article h3 {
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.news-article p {
+  color: var(--text-dark);
+  font-size: 0.9rem;
+  margin-bottom: 0.8rem;
+}
+
+.news-article a {
+  color: var(--secondary);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.news-source {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .news-feed {
+    grid-template-columns: 1fr;
   }
-  
-  .card .price {
-    font-size: 2em;
-    font-weight: bold;
-    color: #007bff;
-  }
-  
-  footer {
-    text-align: center;
-    padding: 10px;
-    background-color: #f9f9f9;
-    border-top: 5px solid #ddd;
-  }
+}
