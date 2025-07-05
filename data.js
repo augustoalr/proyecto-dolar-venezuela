@@ -1,6 +1,6 @@
 window.data = {
-  "dolar_oficial": 110.5569,
+  "dolar_oficial": 111.4186,
   "dolar_paralelo": 115.37,
-  "dolar_promedio": 112.96345,
-  "ultima_actualizacion_hora": "13:26:06"
+  "dolar_promedio": 113.3943,
+  "ultima_actualizacion_hora": "12:29:36"
 };
