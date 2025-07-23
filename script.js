@@ -77,9 +77,7 @@ function initCalculators() {
 
 // Carga de noticias
 async function loadNews() {
-  const apiKey = '8037ba95720e4047bb3ed71baeb51c9d'; // Regístra una key gratis en https://newsapi.org/
-  const query = 'dolar+venezuela';
-  const url = `https://newsapi.org/v2/everything?q=${query}&language=es&sortBy=publishedAt&apiKey=${apiKey}`;
+  const url = `https://newsapi.org/v2/everything?domains=wsj.com&apiKey=8037ba95720e4047bb3ed71baeb51c9d`;
 
   try {
     const response = await fetch(url);
