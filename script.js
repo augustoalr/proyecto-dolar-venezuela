@@ -2,95 +2,80 @@ document.addEventListener('DOMContentLoaded', () => {
   // Verifica si 'data' está definido (por si data.js no se cargó)
   if (typeof data === 'undefined') {
     console.error('Error: data no está definido. Revisa data.js');
+    // Ocultar elementos que dependen de 'data'
+    document.getElementById('dolar-oficial').style.display = 'none';
+    document.querySelector('.card:nth-of-type(2)').style.display = 'none'; // Oculta el card de calculadoras
     return;
   }
 
   // Función auxiliar para formatear valores
   const formatValue = (value) => {
-    return value !== undefined && value !== null ? 
-      `${value.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Bs` : 
+    return value !== undefined && value !== null ?
+      `${value.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Bs` :
       "No disponible";
   };
 
   // Actualiza los elementos del DOM
   document.getElementById('dolar-oficial').querySelector('.price').textContent = formatValue(data.dolar_oficial);
-  document.getElementById('dolar-promedio').querySelector('.price').textContent = formatValue(data.dolar_promedio);
-  document.getElementById('dolar-paralelo').querySelector('.price').textContent = formatValue(data.dolar_paralelo);
 
   // Actualiza la hora
   if (data.ultima_actualizacion_hora) {
     document.getElementById('ultima-actualizacion-hora').textContent = data.ultima_actualizacion_hora;
   }
+
+  // Inicializa las calculadoras y las noticias
+  initCalculators();
+  loadNews();
 });
-
-// Calculadora de divisas
-
-// Función para formatear números
-
 
 // Inicializa calculadoras
 function initCalculators() {
-  // Calculadora Promedio
-  const inputPromedio = document.getElementById('bsd-promedio');
-  const resultadoPromedio = document.getElementById('resultado-promedio');
-  const tasaPromedio = document.getElementById('tasa-promedio');
+  const dolarOficial = data.dolar_oficial;
 
-  // Calculadora de venta Dolar promedio
+  // Si no hay tasa oficial, no se puede continuar
+  if (!dolarOficial) {
+    // Opcional: deshabilitar o ocultar las calculadoras
+    document.querySelector('.card:nth-of-type(2)').style.display = 'none';
+    return;
+  }
+
+  // Calculadora de VENTA (USD a BsD)
   const inputVenta = document.getElementById('usd-venta');
   const resultadoVenta = document.getElementById('resultado-venta');
   const tasaVenta = document.getElementById('tasa-venta');
 
-  // Calculadora BCV
+  // Calculadora de COMPRA (BsD a USD)
   const inputBcv = document.getElementById('bsd-bcv');
   const resultadoBcv = document.getElementById('resultado-bcv');
   const tasaBcv = document.getElementById('tasa-bcv');
 
+  // Actualiza las tasas en la UI
+  tasaVenta.textContent = dolarOficial.toFixed(2);
+  tasaBcv.textContent = dolarOficial.toFixed(2);
 
-
-  // Actualiza tasas al cargar/cambiar data.js
-  function updateTasas() {
-    if (data.dolar_promedio) {
-      tasaPromedio.textContent = data.dolar_promedio.toFixed(2);
-    }
-    if (data.dolar_promedio) {
-      tasaVenta.textContent = data.dolar_promedio.toFixed(2);
-    }
-    if (data.dolar_oficial) {
-      tasaBcv.textContent = data.dolar_oficial.toFixed(2);
-    }
-  }
-
-  // Conversión Promedio
-  inputPromedio.addEventListener('input', () => {
-    if (data.dolar_promedio) {
-      resultadoPromedio.textContent = (inputPromedio.value / data.dolar_promedio).toFixed(2);
-    }
-  });
-
-  // Conversión Venta
+  // Event listener para la calculadora de VENTA
   inputVenta.addEventListener('input', () => {
-    if (data.dolar_promedio) {
-      resultadoVenta.textContent = (inputVenta.value * data.dolar_promedio).toFixed(2);
+    const montoUSD = parseFloat(inputVenta.value);
+    if (!isNaN(montoUSD)) {
+      resultadoVenta.textContent = (montoUSD * dolarOficial).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    } else {
+      resultadoVenta.textContent = '0.00';
     }
   });
 
-  // Conversión BCV
+  // Event listener para la calculadora de COMPRA
   inputBcv.addEventListener('input', () => {
-    if (data.dolar_oficial) {
-      resultadoBcv.textContent = (inputBcv.value / data.dolar_oficial).toFixed(2);
+    const montoBsD = parseFloat(inputBcv.value);
+    if (!isNaN(montoBsD)) {
+      resultadoBcv.textContent = (montoBsD / dolarOficial).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    } else {
+      resultadoBcv.textContent = '0.00';
     }
   });
-
-  // Inicializa
-  updateTasas();
 }
 
-// Ejecutar al cargar
-document.addEventListener('DOMContentLoaded', () => {
-  initCalculators(); // Reemplaza initCalculator()
-});
 
-// En tu script.js
+// Carga de noticias
 async function loadNews() {
   const apiKey = '8037ba95720e4047bb3ed71baeb51c9d'; // Regístra una key gratis en https://newsapi.org/
   const query = 'dolar+venezuela';
@@ -98,8 +83,11 @@ async function loadNews() {
 
   try {
     const response = await fetch(url);
-    const data = await response.json();
-    displayNews(data.articles.slice(0, 6)); // Muestra las 6 más recientes
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const newsData = await response.json();
+    displayNews(newsData.articles.slice(0, 6)); // Muestra las 6 más recientes
   } catch (error) {
     console.error("Error cargando noticias:", error);
     document.getElementById('news-feed').innerHTML = `
@@ -110,17 +98,14 @@ async function loadNews() {
 
 function displayNews(articles) {
   const newsContainer = document.getElementById('news-feed');
+  if (!articles || articles.length === 0) {
+    newsContainer.innerHTML = '<p>No hay noticias disponibles en este momento.</p>';
+    return;
+  }
   newsContainer.innerHTML = articles.map(article => `
     <div class="news-article">
-      <h3>${article.title}</h3>
+      <h3><a href="${article.url}" target="_blank" rel="noopener noreferrer">${article.title}</a></h3>
       <p>${article.description || 'Sin descripción disponible'}...</p>
-      <a href="${article.url}" target="_blank">Leer más →</a>
     </div>
   `).join('');
 }
-
-// Ejecutar al cargar la página
-document.addEventListener('DOMContentLoaded', () => {
-  initCalculators();
-  loadNews(); // Añade esta línea
-});
