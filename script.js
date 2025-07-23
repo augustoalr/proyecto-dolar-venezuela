@@ -90,9 +90,7 @@ async function loadNews() {
     displayNews(newsData.articles.slice(0, 6)); // Muestra las 6 más recientes
   } catch (error) {
     console.error("Error cargando noticias:", error);
-    document.getElementById('news-feed').innerHTML = `
-      <p class="news-error">No se pudieron cargar noticias. <a href="#" onclick="loadNews()">Reintentar</a></p>
-    `;
+    document.getElementById('news-feed').parentElement.style.display = 'none';
   }
 }
 
