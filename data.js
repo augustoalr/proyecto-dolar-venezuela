@@ -1,4 +1,4 @@
 window.data = {
   "dolar_oficial": 136.8931,
-  "ultima_actualizacion_hora": "12:45:27"
+  "ultima_actualizacion_hora": "12:55:24"
 };
