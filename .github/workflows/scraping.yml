@@ -19,6 +19,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          token: ${{ secrets.WORKFLOW_TOKEN }}   # ← aquí el cambio
 
       - name: Setup Chrome
         id: setup-chrome
@@ -43,9 +44,9 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions Bot"
           git config --global user.email "actions@github.com"
+          git stash
           git pull --rebase origin master
+          git stash pop
           git add data.js
           git commit -m "Update dollar rates [skip ci]" || echo "No changes to commit"
           git push origin master
-
-
