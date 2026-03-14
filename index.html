@@ -3,60 +3,138 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Precio del Dólar en Venezuela</title>
+  <title>VEX EXCHANGE | Venezuelan Currency Protocol</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     
   <header>
-    <h1>Precio del Dólar en Venezuela</h1>
-    <p>Actualizado diariamente según las fuentes oficiales.</p>
+    <div class="system-status">
+      <div class="status-dot"></div>
+      System Status: <span id="status-text">Operational</span>
+    </div>
+    <h1 class="logo">VEX EXCHANGE</h1>
+    <p class="subtitle">VENEZUELAN CURRENCY PROTOCOL V2.4</p>
   </header>
 
-  <main>
-    <div class="card" id="dolar-oficial">
-      <h2>Dólar Oficial</h2>
-      <p class="price">Cargando...</p>
-    </div>
+  <main class="main-grid">
+    <!-- Official Rate Card -->
+    <section class="card cyan">
+      <div class="card-header">
+        <div class="card-label">● Official Rate</div>
+        <div class="card-icon">🏛️</div>
+      </div>
+      <h2 class="card-title">Dólar BCV</h2>
+      <div class="price-display">
+        <span class="price-value" id="price-bcv">0.00</span>
+        <span class="price-unit">VES/USD</span>
+      </div>
+      <!-- Placeholder for chart or more info if needed -->
+    </section>
 
-<div class="card">
-  <h2>Calculadoras</h2>
-  
-  <!-- Calculadora de venta -->
-  <div class="calculator highlight">
-    <h1>VENTA</h1>
-    <label for="usd-venta">USD a BsD (BCV Oficial)</label>
-    <input type="number" id="usd-venta" placeholder="Ingresa USD" min="0" step="0">
-    <div class="result">= <span id="resultado-venta">0.00</span> BsD</div>
-    <small>Tasa: <span id="tasa-venta">0.00</span> USD/BsD</small>
-  </div>
+    <!-- P2P Rate Card -->
+    <section class="card magenta">
+      <div class="card-header">
+        <div class="card-label">● P2P Network</div>
+        <div class="card-icon">⚡</div>
+      </div>
+      <h2 class="card-title">Binance USDT</h2>
+      <div class="price-display">
+        <span class="price-value" id="price-p2p">0.00</span>
+        <span class="price-unit">VES/USDT</span>
+      </div>
+    </section>
 
-  <!-- Calculadora Dólar BCV (Oficial) -->
-  <div class="calculator" style="margin-top: 1.5rem;">
-    <label for="bsd-bcv">BsD a USD (BCV Oficial)</label>
-    <input type="number" id="bsd-bcv" placeholder="Ingresa BsD" min="0" step="0.01">
-    <div class="result">= <span id="resultado-bcv">0.00</span> USD</div>
-    <small>Tasa: <span id="tasa-bcv">0.00</span> BsD/USD</small>
-  </div>
-</div>
+    <!-- BTC Rate Card (Full Width on small, Third on large) -->
+    <section class="card full-width" style="border-left-color: #f7931a;">
+      <div class="card-header">
+        <div class="card-label" style="color: #f7931a;">● Crypto Index</div>
+        <div class="card-icon">₿</div>
+      </div>
+      <h2 class="card-title">Bitcoin</h2>
+      <div class="price-display">
+        <span class="price-value" id="price-btc">0.00</span>
+        <span class="price-unit">USDT/BTC</span>
+      </div>
+    </section>
 
-<!-- Después de las calculadoras -->
-<div class="card news-card">
-  <h2>Noticias del Dólar</h2>
-  <div id="news-feed" class="news-feed">
-    <!-- Las noticias se cargarán aquí dinámicamente -->
-  </div>
-  <p class="news-source">Fuente: <a href="https://newsapi.org/" target="_blank">NewsAPI</a></p>
-</div>
+    <!-- Conversion Protocol (USD to VES Official) -->
+    <section class="card cyan">
+      <div class="card-header">
+        <div class="card-label">USD Conversion Protocol</div>
+      </div>
+      <div class="calc-section">
+        <div class="input-field">
+          <label>Input Amount (USD)</label>
+          <div class="input-container">
+            <input type="number" id="usd-input" value="100" min="0">
+            <span class="unit-tag">USD</span>
+          </div>
+        </div>
+
+        <div class="arrow-divider">↓</div>
+
+        <div class="result-container">
+          <div class="result-header">Output Credit (VES)</div>
+          <div class="result-flex">
+            <span class="result-amount" id="ves-official-output">0.00</span>
+            <span class="result-unit">VES</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Remittance Matrix (AED -> VES) -->
+    <section class="card magenta">
+      <div class="card-header">
+        <div class="card-label">Remittance AED Nexus</div>
+      </div>
+      <div class="calc-section">
+        <div class="input-field">
+          <label>Target USD (Official)</label>
+          <div class="input-container">
+            <input type="number" id="target-usd" value="100" min="0">
+            <span class="unit-tag">USD</span>
+          </div>
+        </div>
+
+        <div class="input-field" style="margin-top: -0.5rem;">
+          <label>AED/USDT Rate</label>
+          <div class="input-container">
+            <input type="number" id="aed-rate" value="3.81" step="0.01" min="3.78" max="3.83">
+            <span class="unit-tag">AED</span>
+          </div>
+        </div>
+
+        <div class="result-container">
+          <div class="result-header">Total AED Cost (incl. 2%)</div>
+          <div class="result-flex">
+            <span class="result-amount" id="aed-total-cost">0.00</span>
+            <span class="result-unit">AED</span>
+          </div>
+          <div class="subtitle" style="font-size: 0.6rem; letter-spacing: 1px;">
+            Req: <span id="usdt-needed">0.00</span> USDT
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer>
-    <p>Hora del último chequeo: <span id="ultima-actualizacion-hora">Desconocida</span></p>
+    <div class="footer-content">
+      <div class="api-status">
+        API: <span class="tag">Connected</span> | Latency: <span id="latency">24ms</span> | Encryption: <span class="tag">AES-256</span>
+      </div>
+      <div class="update-info">
+        Last Sync: <span id="last-update">--/--/-- --:--:--</span>
+      </div>
+      <div class="copyright">
+        © 2026 VEX PROTOCOLS. DATA PROVIDED BY CENTRAL BANK & BINANCE P2P API.
+      </div>
+    </div>
   </footer>
 
   <script src="data.js"></script>
   <script src="script.js"></script>
-  
 </body>
-
 </html>
