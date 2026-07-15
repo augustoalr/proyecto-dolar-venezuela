@@ -1,8 +1,8 @@
 window.data = {
   "dolar_oficial": 120.4239,
-  "ultima_actualizacion_hora": "18:05:05",
-  "binancep2p": 862.1223,
+  "ultima_actualizacion_hora": "13:23:58",
+  "binancep2p": 876.3459999999999,
   "btc": 70759.86,
-  "ultima_actualizacion_fecha": "14/07/2026",
-  "bcv": 723.999
+  "ultima_actualizacion_fecha": "15/07/2026",
+  "bcv": 725.747
 };
